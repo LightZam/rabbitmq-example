@@ -1,0 +1,66 @@
+# Federation MQ
+
+This py script provide the ability for configurer to build federation MQ network topology.
+
+You should call this script when node joined, removed, even ip changed in congigurer, and must provide current node IP and cluster IP list to py script
+
+## Usage
+
+```bash
+usage: federationmq.py [-h] [-c CURRENT_NODE]
+                          [-l [CLUSTER_LIST [CLUSTER_LIST ...]]]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -c CURRENT_NODE, --current_node CURRENT_NODE
+  -l [CLUSTER_LIST [CLUSTER_LIST ...]], --cluster-list [CLUSTER_LIST [CLUSTER_LIST ...]]
+```
+
+## Example
+```
+
+# MQ Network
+# []
+
+
+# join
+sudo python federationmq.py -c 172.88.0.2 -l 172.88.0.2 172.88.0.3 172.88.0.4 172.88.0.5
+
+# MQ Network
+# 172.88.0.2 => [172.88.0.3 172.88.0.4 172.88.0.5]
+
+
+
+# remove
+sudo python federationmq.py -c 172.88.0.2 -l 172.88.0.2 172.88.0.3 172.88.0.4
+
+
+# MQ Network
+# 172.88.0.2 => [172.88.0.3 172.88.0.4]
+```
+
+# Log Feedback in /data/log/rabbitmq/federationmq.log
+
+```log
+# cluster list fail
+2020-02-05 16:04:12,856 - root - WARNING - Warn: Not assign any cluster list
+
+
+# current node fail
+2020-02-05 16:05:12,191 - root - WARNING - Warn: Not assign current_node
+
+
+# doing join
+2020-02-05 16:00:02,672 - root - INFO - join to mesh network: 172.88.0.2-172.88.0.3
+2020-02-05 16:00:02,672 - root - INFO - insert or update federation upstream 172.88.0.2-172.88.0.3 in 172.88.0.2
+2020-02-05 16:00:02,672 - root - INFO - insert or update federation upstream policy: connect_to_all_upstreams in 172.88.0.2
+2020-02-05 16:00:02,672 - root - INFO - insert or update federation upstream 172.88.0.2-172.88.0.4 in 172.88.0.2
+2020-02-05 16:00:02,672 - root - INFO - insert or update federation upstream policy: connect_to_all_upstreams in 172.88.0.2
+2020-02-05 16:00:02,672 - root - INFO - insert or update federation upstream 172.88.0.2-172.88.0.5 in 172.88.0.2
+2020-02-05 16:00:02,672 - root - INFO - insert or update federation upstream policy: connect_to_all_upstreams in 172.88.0.2
+
+
+# doing remove
+2020-02-05 16:00:15,447 - root - INFO - remove from mesh network
+2020-02-05 16:00:15,447 - root - INFO - get all upstreams from 172.88.0.2
+```

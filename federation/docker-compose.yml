@@ -1,0 +1,81 @@
+version: "3"
+services:
+  mp1:
+    container_name: mp1
+    build:
+      context: ${PWD}
+    image: rabbitmq:3.8.5-management-federation
+    networks:
+      mp_network:
+        ipv4_address: 172.88.0.2
+    volumes:
+      - ./cert/ca_certificate.pem:/opt/rabbitmq/ca_certificate.pem
+      - ./cert/server.pem:/opt/rabbitmq/server_certificate.pem
+      - ./cert/server.key:/opt/rabbitmq/server_key.pem
+      - ./conf/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+      - ./conf/definitions.json:/opt/rabbitmq/definitions.json
+    ports:
+      - "8671:15672"
+      - "56721:5672"
+      - "56711:5671"
+  mp2:
+    container_name: mp2
+    build:
+      context: ${PWD}
+    image: rabbitmq:3.8.5-management-federation
+    networks:
+      mp_network:
+        ipv4_address: 172.88.0.3
+    volumes:
+      - ./cert/ca_certificate.pem:/opt/rabbitmq/ca_certificate.pem
+      - ./cert/server.pem:/opt/rabbitmq/server_certificate.pem
+      - ./cert/server.key:/opt/rabbitmq/server_key.pem
+      - ./conf/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+      - ./conf/definitions.json:/opt/rabbitmq/definitions.json
+    ports:
+      - "8672:15672"
+      - "56722:5672"
+      - "56712:5671"
+  mp3:
+    container_name: mp3
+    build:
+      context: ${PWD}
+    image: rabbitmq:3.8.5-management-federation
+    networks:
+      mp_network:
+        ipv4_address: 172.88.0.4
+    volumes:
+      - ./cert/ca_certificate.pem:/opt/rabbitmq/ca_certificate.pem
+      - ./cert/server.pem:/opt/rabbitmq/server_certificate.pem
+      - ./cert/server.key:/opt/rabbitmq/server_key.pem
+      - ./conf/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+      - ./conf/definitions.json:/opt/rabbitmq/definitions.json
+    ports:
+      - "8673:15672"
+      - "56723:5672"
+      - "56713:5671"
+  mp4:
+    container_name: mp4
+    build:
+      context: ${PWD}
+    image: rabbitmq:3.8.5-management-federation
+    networks:
+      mp_network:
+        ipv4_address: 172.88.0.5
+    volumes:
+      - ./cert/ca_certificate.pem:/opt/rabbitmq/ca_certificate.pem
+      - ./cert/server.pem:/opt/rabbitmq/server_certificate.pem
+      - ./cert/server.key:/opt/rabbitmq/server_key.pem
+      - ./conf/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+      - ./conf/definitions.json:/opt/rabbitmq/definitions.json
+    ports:
+      - "8674:15672"
+      - "56725:5672"
+      - "56715:5671"
+networks:
+    mp_network:
+      driver: bridge
+      ipam:
+        driver: default
+        config:
+          - subnet: 172.88.0.0/16

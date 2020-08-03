@@ -1,0 +1,76 @@
+{
+    "users": [
+        {
+            "hashing_algorithm": "rabbit_password_hashing_sha256", 
+            "tags": "administrator", 
+            "name": "mp", 
+            "password_hash": "M83+GuAeT/YcLCEU5t0ltmpPx7BCYJ95/KMCnW1kI1Cr7i+J"
+        },
+        {
+            "hashing_algorithm": "rabbit_password_hashing_sha256", 
+            "tags": "administrator", 
+            "name": "rabbitmq", 
+            "password_hash": "1YCEVqeQtCWJYfqHzz5vZ2mlxv1wfLlWM9MsHgeHKbuQDlFl"
+        }
+    ],
+    "vhosts": [
+        {
+            "name": "/"
+        }
+    ],
+    "queues": [
+        {
+            "vhost": "/", 
+            "durable": false, 
+            "auto_delete": false, 
+            "name": "mq_message_hello", 
+            "arguments": {}
+        }
+    ],
+    "exchanges": [
+        {
+            "name": "message.fanout", 
+            "durable": false, 
+            "vhost": "/", 
+            "internal": false, 
+            "arguments": {}, 
+            "type": "fanout", 
+            "auto_delete": false
+        },
+        {
+            "name": "ex_overlay", 
+            "durable": false, 
+            "vhost": "/", 
+            "internal": false, 
+            "arguments": {}, 
+            "type": "direct", 
+            "auto_delete": false
+        }
+    ], 
+    "bindings": [
+        {
+            "vhost": "/", 
+            "destination": "mq_message_hello", 
+            "routing_key": "mq_message_hello", 
+            "source": "message.fanout", 
+            "arguments": {}, 
+            "destination_type": "queue"
+        }
+    ], 
+    "permissions": [
+        {
+            "write": ".*", 
+            "vhost": "/", 
+            "read": ".*", 
+            "configure": "^(federation: ex_overlay.*)", 
+            "user": "mp"
+        }, 
+        {
+            "write": ".*", 
+            "vhost": "/", 
+            "read": ".*", 
+            "configure": ".*", 
+            "user": "rabbitmq"
+        }
+    ]
+}
